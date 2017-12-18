@@ -17,9 +17,9 @@ struct JavaCallerContext
     jobject o;
 };
 
-void *pthreadEntryPointFunction(void *context)
+void *thread_entry_point(void *context)
 {
-    std::cout << "Starting  pthreadEntryPointFunction";
+    std::cout << "Starting  thread_entry_point";
     
     JavaCallerContext *caller = (JavaCallerContext *)context;
 
@@ -50,11 +50,12 @@ void *pthreadEntryPointFunction(void *context)
 
 JNIEXPORT void JNICALL Java_com_threading_Thread_start0(JNIEnv *env, jobject o)
 {
-    JavaCallerContext *caller = new JavaCallerContext();
+
 
     JavaVM *jvm;
     env->GetJavaVM(&jvm);
 
+    JavaCallerContext *caller = new JavaCallerContext();
     caller->jvm = jvm;
     caller->o = env->NewGlobalRef(o);
 
@@ -64,7 +65,7 @@ JNIEXPORT void JNICALL Java_com_threading_Thread_start0(JNIEnv *env, jobject o)
     pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
     
     pthread_t javaThread;
-    if (pthread_create(&javaThread, &attr, pthreadEntryPointFunction, caller))
+    if (pthread_create(&javaThread, &attr, thread_entry_point, caller))
     {
         fprintf(stderr, "Error creating thread\n");
         return;
