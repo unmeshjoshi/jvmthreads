@@ -48,11 +48,11 @@ void *thread_entry_point(void *args)
 {
     std::cout << "Starting  thread_entry_point";
     
-    JavaThreadWrapper *javaThread = (JavaThreadWrapper*)args;
-    javaThread->attachToJvm();
-    javaThread->callRunMethod();
+    JavaThreadWrapper *javaThreadWrapper = (JavaThreadWrapper*)args;
+    javaThreadWrapper->attachToJvm();
+    javaThreadWrapper->callRunMethod();
 
-    delete javaThread;
+    delete javaThreadWrapper;
 
     return NULL;
 }
