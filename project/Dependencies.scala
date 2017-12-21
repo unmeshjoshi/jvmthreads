@@ -6,6 +6,6 @@ object Dependencies {
   val Service = Seq(
     Libs.`junit` % Test,
     Libs.`junit-interface` % Test,
-    Libs.`mockito-core` % Test,
+    Libs.`mockito-core` % Test
   )
 }

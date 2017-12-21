@@ -3,10 +3,10 @@ package com.threading;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Thread {
-    static AtomicInteger threadCount = new AtomicInteger(1);
+    static AtomicInteger threadId = new AtomicInteger(1);
 
     public void run() {
-        System.out.println("Running Thread " + threadCount.getAndIncrement());
+        System.out.println("Running Thread " + threadId.getAndIncrement());
     }
 
     public void start() {
