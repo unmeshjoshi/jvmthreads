@@ -38,11 +38,12 @@ void JavaThreadWrapper::callRunMethod() {
     JNIEnv *env = attachToJvm();
     jclass cls = env->GetObjectClass(threadObjectRef);
     jmethodID runId = env->GetMethodID(cls, "run", "()V");
-
-    if (runId == nullptr)
-        cout << "No run method !!" << endl;
-    else
+    if (runId != nullptr) {
         env->CallVoidMethod(threadObjectRef, runId);
+        
+    } else {         
+        cout << "No run method found in the Thread object!!" << endl;
+    }
 
     env->DeleteGlobalRef(threadObjectRef); //delete global ref before detaching the thread.
 }
