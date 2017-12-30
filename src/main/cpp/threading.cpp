@@ -9,19 +9,20 @@ class JavaThreadWrapper
 private:
     JavaVM *jvm;
     jobject threadObjectRef;
-    JNIEnv *env;
+    JNIEnv* attachToJvm();
 public:
     JavaThreadWrapper(JNIEnv *env, jobject javaThreadObjectRef);
-    void attachToJvm();
     void callRunMethod();
     ~JavaThreadWrapper();
 };
 
-void JavaThreadWrapper::attachToJvm() {
-    if (jvm->AttachCurrentThread((void **)&this->env, NULL) != 0)
+JNIEnv* JavaThreadWrapper::attachToJvm() {
+    JNIEnv *env;
+    if (jvm->AttachCurrentThread((void **)&env, NULL) != 0)
     {
         std::cout << "Failed to attach" << std::endl;
     }
+    return env;
 }
 
 JavaThreadWrapper::JavaThreadWrapper(JNIEnv *env, jobject javaThreadObjectRef) {
@@ -30,11 +31,11 @@ JavaThreadWrapper::JavaThreadWrapper(JNIEnv *env, jobject javaThreadObjectRef) {
 }
 
 JavaThreadWrapper::~JavaThreadWrapper() {
-    env->DeleteGlobalRef(threadObjectRef); //delete global ref before detaching the thread.
     jvm->DetachCurrentThread(); //detach from current thread
 }
 
 void JavaThreadWrapper::callRunMethod() {
+    JNIEnv *env = attachToJvm();
     jclass cls = env->GetObjectClass(threadObjectRef);
     jmethodID runId = env->GetMethodID(cls, "run", "()V");
 
@@ -42,6 +43,8 @@ void JavaThreadWrapper::callRunMethod() {
         cout << "No run method !!" << endl;
     else
         env->CallVoidMethod(threadObjectRef, runId);
+
+    env->DeleteGlobalRef(threadObjectRef); //delete global ref before detaching the thread.
 }
 
 void *thread_entry_point(void *args)
@@ -49,7 +52,6 @@ void *thread_entry_point(void *args)
     std::cout << "Starting  thread_entry_point";
     
     JavaThreadWrapper *javaThreadWrapper = (JavaThreadWrapper*)args;
-    javaThreadWrapper->attachToJvm();
     javaThreadWrapper->callRunMethod();
 
     delete javaThreadWrapper;
