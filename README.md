@@ -12,3 +12,6 @@ g++ -fPIC -I$JAVA_HOME/include -I$JAVA_HOME/include/linux -lstdc++ -o libthreadi
 
 Go to project directory and run
 sbt "runMain com.threading.ThreadingApp"
+
+#Running docker container
+docker run -it -v ~/.coursier/cache:/root/.cache/coursier -v ~/.ivy2:/root/.ivy2  -v ~/.sbt:/root/.sbt -v ~/.bintray:/root/.bintray -v $(pwd):/threading threading:latest /bin/bash
