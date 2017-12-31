@@ -11,8 +11,9 @@ RUN g++ -fPIC -I$JAVA_HOME/include -I$JAVA_HOME/include/linux -lstdc++ -o libthr
 
 cd src/main/cpp
 javah -classpath ../../../target/scala-2.12/classes -jni com.threading.Thread
+
 g++ -fPIC -I$JAVA_HOME/include -I$JAVA_HOME/include/linux -lstdc++ -std=c++11 -o libthreading.so -shared threading.cpp
  
 While running ThreadingApp, set java.library.path=<threadingappdir>/src/main/cpp
 
-docker run -it -v ~/.ivy2:/root/.ivy2  -v ~/.sbt:/root/.sbt -v ~/.bintray:/root/.bintray -v $(pwd):/threading threading:latest /bin/bash
+docker run -it -v ~/.coursier/cache:/root/.cache/coursier -v ~/.ivy2:/root/.ivy2  -v ~/.sbt:/root/.sbt -v ~/.bintray:/root/.bintray -v $(pwd):/threading threading:latest /bin/bash
