@@ -17,7 +17,10 @@ generateJniHeader := {
 
 //TODO: Pass $JAVA_HOME instead of fixed path /usr/lib/jvm/java-8-openjdk-amd64
 compileCpp := {
-  sys.process.Process("g++ -fPIC -I/usr/lib/jvm/java-8-openjdk-amd64/include -I/usr/lib/jvm/java-8-openjdk-amd64/include/linux -lstdc++ -std=c++11 -o libthreading.so -shared threading.cpp", (baseDirectory.value / "src/main/cpp")).!!
+  generateJniHeader.value
+  val javaHome = System.getenv("JAVA_HOME")
+//  sys.process.Process("g++ -fPIC -I/usr/lib/jvm/java-8-openjdk-amd64/include -I/usr/lib/jvm/java-8-openjdk-amd64/include/linux -lstdc++ -std=c++11 -o libthreading.so -shared threading.cpp", (baseDirectory.value / "src/main/cpp")).!!
+  sys.process.Process(s"g++ -fPIC -I${javaHome}/include -I${javaHome}/include/linux -lstdc++ -std=c++11 -o libthreading.so -shared threading.cpp", (baseDirectory.value / "src/main/cpp")).!!
 }
 
 javaOptions in run += s"-Djava.library.path=${baseDirectory.value}/src/main/cpp"
