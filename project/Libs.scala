@@ -1,5 +1,5 @@
 import sbt._
-import com.trueaccord.scalapb.compiler.Version.scalapbVersion
+import scalapb.compiler.Version.scalapbVersion
 
 object Libs {
   val ScalaVersion = "2.12.4"
