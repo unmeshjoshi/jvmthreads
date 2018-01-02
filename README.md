@@ -6,7 +6,7 @@ A small demo app to show how java threads are mapped to linux threads through JN
 * Checkout the project
 * Build docker image. The image will contain jdk 8, g++ and sbt
 ```
-    docker build -t threading
+    docker build -t threading .
 ```
 * Run docker container from the project directory mapping coursier cache, ivy cache and .sbt on your machine. This saves loads of time downloading all the dependencies
 ```
